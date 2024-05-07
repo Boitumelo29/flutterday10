@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterday10/data_services.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,6 +13,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _dateService = DataService();
+  var _response;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,8 +23,13 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Column(
             children: [
-              ElevatedButton(
-                  onPressed: () {}, child: const Text("Make Request"))
+              Builder(builder: (context) {
+                if (_response != null) {
+                  return Text(_response);
+                }
+                return ElevatedButton(
+                    onPressed: _makeRequest, child: const Text("Make Request"));
+              })
             ],
           ),
         ),
@@ -28,5 +37,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _makeRequest() async {}
+  void _makeRequest() async {
+    final response = await _dateService.makeRequestToApi();
+    setState(() {
+      _response = response;
+    });
+  }
 }
